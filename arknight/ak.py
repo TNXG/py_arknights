@@ -1,3 +1,4 @@
+from __future__ import annotations
 import time
 import json
 import hmac
@@ -16,7 +17,7 @@ from .exception import PostException
 headers = {  # all requests public headers, don't change!
     "Content-Type": "application/json",
     "X-Unity-Version": "2017.4.39f1",
-    "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 11; KB2000 Build/RP1A.201005.001)",
+    "User-Agent": "Mozilla/5.0 (LoYuNetwork; MiHyper) Raiden_Aurora/16",
     "Connection": "Keep-Alive",
 }
 
@@ -71,7 +72,8 @@ class Arknights:
 
     def postGs(self, cgi, data, verify=True):
         """Post data to Game Server"""
-        req = self.http.post(game_server + cgi, json=data, headers=self.getGsHeaders())
+        req = self.http.post(game_server + cgi, json=data,
+                             headers=self.getGsHeaders())
         result = req.json()
         if verify:
             status_code = result.get("statusCode", 0)
@@ -101,7 +103,8 @@ class Arknights:
             "https://ak-conf.hypergryph.com/config/prod/official/network_config"
         ).json()
         self.network_version = json.loads(res["content"])["configVer"]
-        self.session_file = self.session_dir.joinpath(f"{self.username}.pickle")
+        self.session_file = self.session_dir.joinpath(
+            f"{self.username}.pickle")
         if self.session_file.exists() and self.use_cache:
             with self.session_file.open("rb") as f:
                 session = pickle.load(f)
@@ -121,7 +124,8 @@ class Arknights:
                 self.network_version,
             ) = session
             self.seqnum += 1
-            session_verify = self.postGs("/account/syncData", {"platform": 1}, False)
+            session_verify = self.postGs(
+                "/account/syncData", {"platform": 1}, False)
             if session_verify.get("statusCode", 0) == 401:
                 print(session_verify)
                 print("session expired, try to login again")
@@ -137,7 +141,8 @@ class Arknights:
             elif session_verify.get("statusCode", 0) != 0:
                 print(session_verify)
                 raise PostException(session_verify)
-            print(f"{session_verify['user']['status']['nickName']} session loaded")
+            print(
+                f"{session_verify['user']['status']['nickName']} session loaded")
             print("login form session file success")
             return (
                 self.username,
@@ -160,7 +165,8 @@ class Arknights:
                 self.userLogin()
                 self.authLogin()
 
-            self.postAs("/user/info/v1/need_cloud_auth", {"token": self.access_token})
+            self.postAs("/user/info/v1/need_cloud_auth",
+                        {"token": self.access_token})
             self.getOnline()
 
         sign_data = {

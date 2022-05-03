@@ -1,5 +1,5 @@
+from __future__ import annotations
 from .ak import Arknights
-
 
 class AkCall:
     class Account:
@@ -49,7 +49,8 @@ class AkCall:
             if sort:
                 if sortkey == "level":
                     result["result"].sort(
-                        key=lambda k: (k.get("level", 0), int(k.get("uid", 0))),
+                        key=lambda k: (k.get("level", 0),
+                                       int(k.get("uid", 0))),
                         reverse=True,
                     )
                 elif sortkey == "uid":
