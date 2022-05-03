@@ -12,3 +12,5 @@ arknights CN request library
 ```shell
 pip install arknights
 ```
+
+# [原仓库](https://github.com/djkcyl/py_arknights/)
